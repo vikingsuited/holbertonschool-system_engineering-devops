@@ -1,0 +1,14 @@
+# Distributed Web Infrastructure
+
+This setup uses a load balancer (HAproxy) to distribute traffic between two web servers, each hosting Nginx, an application server, and a copy of the codebase. It also includes a MySQL database cluster in a Primary-Replica (Master-Slave) configuration.
+
+*   **Load Balancer (HAproxy):** Added to distribute incoming requests across multiple servers, ensuring high availability and reliability.
+*   **Round-Robin Algorithm:** This algorithm sends each new request to the next server in line. It's simple and ensures an even distribution of traffic.
+*   **Active-Active Setup:** In this setup, the load balancer sends traffic to all available servers simultaneously. Unlike Active-Passive (where one server sleeps), here all resources are utilized.
+*   **Database Primary-Replica Cluster:** 
+    *   **Primary node:** Handles all "write" operations (adding/updating data).
+    *   **Replica node:** Mirrors the Primary node and handles "read" operations.
+
+*   **SPOF (Single Point of Failure):** The Load Balancer itself is a SPOF. If it fails, the whole system goes down.
+*   **Security:** There are no firewalls and no HTTPS (SSL) encryption, making data vulnerable.
+*   **Monitoring:** There is no monitoring system to alert us if a server or service crashes.

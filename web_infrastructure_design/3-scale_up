@@ -1,0 +1,17 @@
+This infrastructure design focuses on high availability and performance by decoupling services and introducing redundancy at the load balancer level.
+
+*   **Additional Load Balancer (HAproxy Cluster):** I am adding a second load balancer to create a cluster. This ensures that if the primary load balancer fails, the secondary one can take over immediately (High Availability), eliminating the single point of failure (SPOF) at the LB level.
+*   **Separated Web Server:** The web server (Nginx) is now on its own dedicated server. Its sole job is to handle HTTP requests and serve static content or proxy requests to the application server.
+*   **Separated Application Server:** The application server is moved to a dedicated server. This allows the application logic (Python, PHP, Node.js, etc.) to have its own CPU and RAM resources, preventing it from competing with the database or web server.
+*   **Separated Database Server (MySQL):** The database now runs on its own server. Databases are resource-intensive (especially disk I/O and RAM); by isolating it, we ensure better performance and security.
+
+By splitting the web server, application server, and database into their own servers, we achieve:
+1.  **Scalability:** We can scale each layer independently. If the database is slow, we can upgrade just the database server without touching the web servers.
+2.  **Performance:** Each server's resources are dedicated to a single task, reducing resource contention.
+3.  **Security:** We can apply stricter firewall rules. For example, the database server can be configured to only accept connections from the application server's IP.
+
+Configuring HAproxy in a cluster (usually with a tool like Keepalived) allows for a "Floating IP" or "Virtual IP." If one HAproxy node goes down, the IP automatically moves to the second node, ensuring the website stays online.
+
+*   **Complexity:** Managing multiple servers and a cluster setup increases operational complexity and requires more advanced configuration management.
+*   **Cost:** More servers mean higher infrastructure costs.
+*   **Database SPOF:** Although we have split the database, we currently only have one server for it in this specific requirement. If the single database server fails, the application will lose its data source.

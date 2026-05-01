@@ -1,0 +1,15 @@
+This infrastructure design focuses on security and observability for the website www.foobar.com. It builds upon the distributed architecture by adding firewalls, SSL encryption, and a monitoring system.
+
+*   **Firewalls (3 units):** Added to each server to protect the network. They act as a barrier, controlling incoming and outgoing traffic based on security rules, effectively blocking unauthorized access.
+*   **SSL Certificate (HTTPS):** Used to encrypt the data transmitted between the user's browser and the web server. This ensures that sensitive information cannot be intercepted by attackers (protecting against Man-in-the-Middle attacks).
+*   **Monitoring Clients (Sumologic/Prometheus):** Installed on each server to collect system and application metrics.
+
+*   **Firewalls:** They serve to filter network traffic. In this setup, they are configured to allow only necessary ports (e.g., 80, 443, 22 for SSH) and block everything else.
+*   **HTTPS Traffic:** Serving traffic over HTTPS is mandatory for modern web security to provide data integrity and encryption.
+*   **Monitoring Purpose:** Monitoring is used to track the health, performance, and uptime of the infrastructure. It helps identify bottlenecks and alerts engineers before a failure occurs.
+*   **Data Collection:** The monitoring tool collects data through an agent/client installed on the servers. This agent pushes logs and metrics (CPU usage, RAM, etc.) to a central dashboard (like Sumologic).
+*   **Monitoring Web Server QPS (Queries Per Second):** To monitor QPS, we need to parse the web server (Nginx) access logs or use a specific exporter (like Nginx VTS) to count the number of incoming requests and visualize them on a dashboard.
+
+*   **SSL Termination at Load Balancer:** Terminating SSL at the load balancer level means the traffic between the load balancer and the internal web servers is unencrypted (HTTP). If an attacker breaches the internal network, they can read the data.
+*   **Single Write Database:** Having only one MySQL server capable of accepting writes (Primary node) is a risk. If the Primary node fails, the application can no longer perform write operations (like user registrations or posts), leading to partial downtime.
+*   **Same Components on All Servers:** Having the database, web server, and app server on every node increases the attack surface. If one component is compromised, the entire server (including the database) is at risk. It also makes scaling individual components more difficult.

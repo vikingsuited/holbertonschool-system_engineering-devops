@@ -1,0 +1,21 @@
+This is a single-server web infrastructure designed to host the website www.foobar.com. The infrastructure consists of a single server with an IP address of 8.8.8.8.
+
+*   **Server:** A physical or virtual machine that provides computing resources to run the web application.
+*   **Domain Name:** www.foobar.com is the human-readable address used by users to access the server.
+*   **DNS (A Record):** The DNS 'A' record maps the domain name www.foobar.com to the server's IP address (8.8.8.8).
+*   **Web Server (Nginx):** A software responsible for accepting HTTP requests from clients (browsers) and serving web content.
+*   **Application Server:** A software that executes the application logic and processes dynamic content.
+*   **Application Files (Codebase):** The source code and assets of the web application.
+*   **Database (MySQL):** A relational database management system used to store and manage the application's data.
+
+1.  The user enters www.foobar.com in their browser.
+2.  The browser queries the DNS to find the IP address of the domain.
+3.  DNS returns the IP 8.8.8.8.
+4.  The browser sends an HTTP request to the server at 8.8.8.8.
+5.  Nginx receives the request and forwards it to the application server if needed.
+6.  The application server processes the request, interacting with the database and codebase.
+7.  The server sends the response back to the browser.
+
+*   **SPOF (Single Point of Failure):** Since there is only one server, any failure (hardware, software, or network) will take the entire website offline.
+*   **Downtime during maintenance:** The server must be stopped or restarted for updates, causing service interruption.
+*   **Scalability:** A single server cannot handle a high volume of traffic as its resources (CPU, RAM) are limited.
